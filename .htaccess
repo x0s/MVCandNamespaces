@@ -1,0 +1,23 @@
+# Nous allons réécrire les URLs pour plus de clarté
+# La lecture des règles se fait ligne par ligne, pour cette raison
+# les premières règles sont plus contraignantes que les dernières
+<IfModule mod_rewrite.c>
+	Options +FollowSymLinks -MultiViews
+
+	#Active le module de réécriture.
+	RewriteEngine On
+
+	#
+	#RewriteCond %{REQUEST_FILENAME} !-f
+	
+	# NC: No Case	>> Indifférent aux minuscules et majuscules
+	# L: Last		>> Dernière instruction à éxécuter en cas de correspondance > permet d'éviter les boucles infinies
+	# QSA: Qsappend	>> Transfère également les éventuels paramètres de l'URL (?param=blabla...)
+	
+	RewriteRule	^(.*)/(.*)/(.*)/$	index.php?controleur=$1&action=$2&parametres=$3	[L,QSA,NC]
+
+	RewriteRule	^(.*)/(.*)/$	index.php?controleur=$1&action=$2	[L,QSA,NC]
+	
+	RewriteRule	^(.*)/$	index.php?controleur=$1	[L,QSA,NC]
+
+</IfModule>
