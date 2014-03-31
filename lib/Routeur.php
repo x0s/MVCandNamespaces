@@ -4,7 +4,7 @@ namespace MVCandNamespaces\lib;
 
 class Routeur 
 {
-	public static function whichRoutetoFollow($requete)
+	public static function whichRoutetoFollow(array $requete)
 	{
 		//route par défaut: Controleur:initAction
 		$route['controleur'] 	= "Controleur";

@@ -21,7 +21,7 @@ use MVCandNamespaces\lib\Routeur;
 class Kernel 
 {
 	//To avoid any injection, We secure all parameters of the GET request
-	private function secureRequestParameters($request)
+	private function secureRequestParameters(array $request)
 	{
 		foreach($request as $parameter => $value)
 		{
@@ -38,7 +38,7 @@ class Kernel
 	public function load() {
 
 		// On récupère et sécurise la requête 
-		$request = (!empty($_GET)) ? $this->secureRequestParameters($_GET) : "";
+		$request = (!empty($_GET)) ? $this->secureRequestParameters($_GET) : array();
 		
 		//On demande au routeur la bonne route(contrôleur, action, paramètres)
 		$route = Routeur::whichRouteToFollow($request);
