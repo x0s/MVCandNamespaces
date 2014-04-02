@@ -1,18 +1,10 @@
 <?php
 /*
+	Kernel.php
+
 	|> What is called Kernel is the core of the application and aims at:
 	|	- asking the router: Which controller do I have to call As I give thou this (URL) request ? (A kernel can be very polite :))
-	|	- d'Instancier le routeur et appeller la méthode (action) requise.
-	|
-	|> Comments:
-	|	We are going to instantiate dynamically the controller class and since PHP resolves namespaces at compile time, 
-	|	We need to use a constant (NAMESPACE_CONTROLLERS, defined within frontal controller: index.php) 
-	|	Examples:
-	|		use MVCandNamespaces\app\controllers;
-	|		$controleur = New controllers\$route['controleur']() >> error
-	|	or
-	|		use MVCandNamespaces\app\controllers\ControleurBananes as ControleurBananes;
-	|		$controleur = New $route['controleur'](); >> Cherche la classe __NAMESPACE__\ControleurBananes sans prendre en compte l'aliasing!
+	|	- instantiating the appropriate controller and call the required method(Action)
 */
 namespace MVCandNamespaces\lib;
 
@@ -25,30 +17,30 @@ class Kernel
 	{
 		foreach($request as $parameter => $value)
 		{
-			$request[$parameter] = htmlentities($value, ENT_QUOTES);
-			echo $parameter." : ".$request[$parameter]."<br />"; //Insérer fichier log
+			$securedRequest[$parameter] = htmlentities($value, ENT_QUOTES);
+			echo "Secured GET parameter <em>".$parameter."</em> : ".$securedRequest[$parameter]."<br />"; //Insérer fichier log
 		}
-		return $request;
+		return $securedRequest;
 	}
 
 	/* Kernel Loading means
 	| - To Retrieve and Secure URL Request
-	| - 
+	| - To ask the router the route
+	| - To instantiate the controller and execute the action
 	*/
 	public function load() {
 
-		// On récupère et sécurise la requête 
 		$request = (!empty($_GET)) ? $this->secureRequestParameters($_GET) : array();
 		
-		//On demande au routeur la bonne route(contrôleur, action, paramètres)
-		$route = Routeur::whichRouteToFollow($request);
+		// We expect a route <=> Array("controller" => , "action" => [, ...parameters])
+		$route = Router::whichRouteToFollow($request);
 		
-		var_dump($route); //Une route contient l'Action à déclencher par un Contrôleur
+		var_dump($route); //A route is basically the action that has to be triggered by a controller
 		
-		//Instanciation du contrôleur
-		$route['controleur'] = $route['controleur'];
-		$controleur = New $route['controleur']();
-		$controleur->$route['action']();
+		// Controller instantiation
+		$route['controller'] = $route['controller'];
+		$controller = New $route['controller']();
+		$controller->$route['action']();
 	
 	}
 

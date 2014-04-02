@@ -1,23 +1,20 @@
-# Nous allons réécrire les URLs pour plus de clarté
-# La lecture des règles se fait ligne par ligne, pour cette raison
-# les premières règles sont plus contraignantes que les dernières
+# We are going to rewrite URL for clarity purposes
+# Apache reads rules line by line, that is why the first rules are the most restrictive.
+# To use this feature, make sure rewrite_module is loaded in Apache (httpd.conf)
 <IfModule mod_rewrite.c>
 	Options +FollowSymLinks -MultiViews
 
-	#Active le module de réécriture.
+	#Enable rewriting module
 	RewriteEngine On
+	
+	# NC: No Case	>> Not case-sensitive
+	# L: Last		>> Last rule to execute when matched > Avoid infinite loops
+	# QSA: Qsappend	>> Also Transfer potential URL parameters (?param=blabla...)
+	
+	RewriteRule	^(.*)/(.*)/(.*)/$	index.php?controller=$1&action=$2&parameters=$3	[L,QSA,NC]
 
-	#
-	#RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule	^(.*)/(.*)/$	index.php?controller=$1&action=$2	[L,QSA,NC]
 	
-	# NC: No Case	>> Indifférent aux minuscules et majuscules
-	# L: Last		>> Dernière instruction à éxécuter en cas de correspondance > permet d'éviter les boucles infinies
-	# QSA: Qsappend	>> Transfère également les éventuels paramètres de l'URL (?param=blabla...)
-	
-	RewriteRule	^(.*)/(.*)/(.*)/$	index.php?controleur=$1&action=$2&parametres=$3	[L,QSA,NC]
-
-	RewriteRule	^(.*)/(.*)/$	index.php?controleur=$1&action=$2	[L,QSA,NC]
-	
-	RewriteRule	^(.*)/$	index.php?controleur=$1	[L,QSA,NC]
+	RewriteRule	^(.*)/$	index.php?controller=$1	[L,QSA,NC]
 
 </IfModule>
