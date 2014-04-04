@@ -1,32 +1,24 @@
 <?php
-namespace MVCandNamespaces\app\models; //namespace suivant PSR-0
+namespace MVCandNamespaces\app\models;
+/*
+	Model.php
+	|> Parent class of models
+	|	- Provides to child classes a single instance of a database connection
+*/
 
-//On inscrit le namespace de la connexion une seule fois ici, on transmettra la connexion par héritage!
-use MVCandNamespaces\lib\ConnexionBdd; 
+use MVCandNamespaces\lib\DbConnection; 
 
-//use PDO; // Utile si on utilise des constantes PDO (ex: PDO::PARAM_INT)
+//use PDO; // uncomment when PDO constants are required (ex: PDO::PARAM_INT)
 
 Class Model
 {
-	// Attribut permettant aux classes filles(modèles) d'accéder à la connexion à la bdd
+	// Child classes will access database connection through this attribute
 	protected $_db;
 	
-	/*public function __construct()
+	// Retrieve the database Connection from DbConnection (PDO Object)
+	protected function getDb() 
 	{
-		$this->_db = ConnexionBdd::getInstance();
-	}*/
-	
-	// Fonction qui récupère l'instance de la connexion à la Base de données (objet PDO)
-	protected function getBdd() 
-	{
-		$this->_db = ConnexionBdd::getInstance();
-		
-		
-		/*$stmt = $this->_db->prepare('SELECT * FROM test WHERE id = 3');
-		$stmt->bindValue(':id', 3, PDO::PARAM_INT);
-		$stmt->execute();
-		print_r($stmt->fetchObject());
-		*/
+		$this->_db = DbConnection::getInstance();
 		
 		return $this->_db;
 	}

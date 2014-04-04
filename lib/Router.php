@@ -1,4 +1,5 @@
 <?php
+namespace MVCandNamespaces\lib;
 /*
 	Router.php
 	|> According to a request expressed by the Kernel, the purpose of a router is to find the matching route.
@@ -20,15 +21,13 @@
 */
 
 
-namespace MVCandNamespaces\lib;
-
 class Router 
 {
-	public static function whichRoutetoFollow(array $request)
+	static public function whichRoutetoFollow(array $request)
 	{
 		//Default route: controller:initAction
 		$route['controller'] 	= "controller";
-		$route['action'] 		= "initAction";		//Warning: Same default method name for every controller. ControllerInterface is taking care of this.
+		$route['action'] 		= "initAction";		//Warning: Same default method name for every controller. ControllerInterface is ensuring correct implementation.
 		
 		// Let me see if I have a route for such a controller!
 		if(isset($request['controller']) && class_exists(NAMESPACE_CONTROLLERS.$request['controller']))

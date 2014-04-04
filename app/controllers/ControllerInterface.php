@@ -1,13 +1,12 @@
 <?php
 /*
 	|> ControllerInterface
-	|	Contraint les controleurs à définir une méthode (action) par défaut.
-
+	|	Force the controllers to define default methods (Action).
 */
 namespace MVCandNamespaces\app\controllers;
 
 interface ControllerInterface
 {
-	// Action requise par défaut par le routeur lors du chargement du controleur par le Kernel
+	// Signing this method ensures consistency with the router default behaviour
 	public function initAction();
 }

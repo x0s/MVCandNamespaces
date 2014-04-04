@@ -1,40 +1,39 @@
 <?php
 namespace MVCandNamespaces\lib;
 /*
-	Fonction d'autoload spl_autoload_register (Standard Php Library)
-	-> Permet de charger automatiquement les classes requises quand celles-ci ne sont pas trouvées.
-	-> Ajoute sur une pile (register) une fonction magique __autoload() 
-	
-	On charge les classes en fonction de leurs namespaces.
-	L'application est organisée telle que Namespaces <=> Arborescence fichiers
-	EX: 
-		'MVCandNamespaces\app\controllers\Controleur' => 'C:\wamp\www\MVCandNamespaces\app\controllers\Controleur.php' 
-		'MVCandNamespaces\ClassRacine' => 'C:\wamp\www\MVCandNamespaces\ClassRacine.php'
-		'MVCandNamespaces\Class_Racine' => 'C:\wamp\www\MVCandNamespaces\Class\Racine.php'
-		'MVCandNamespaces\name_Space\Class_Racine' => 'C:\wamp\www\MVCandNamespaces\name_Space\Class\Racine.php'
-	
-	Toutes les classes sont situées en dessous du vendor name "MVCandNamespaces"
-	ROOT est une constante définie dans index.php (point d'entrée de l'app) contenant le chemin absolu du dossier contenant le vendor!
-	
-	
-	Note:
-		Si la classe recherchée est à la racine (dans le dossier vendor), l'autoload ne trouve pas de position de "dernier séparateur" et saute directement
+	bootstrap.php
+	|>This file aims at dynamically loading classes when needed in respect of PSR-0 Autoloading Standard.
+	|
+	|>spl_autoload_register Autoload function(Standard Php Library)
+	|	- Allows dynamic class loading
+	|	- Consists of pushing(registering) magical autoload functions on a stack 
+	|
+	|>Since this application invokes namespaces feature to organise classes,
+	|We include required classes according to a correspondence between their Namespace and the folder structure.
+	|Examples: 
+	|	'MVCandNamespaces\app\controllers\Controller' => 'C:\path\to\project\www\MVCandNamespaces\app\controllers\Controller.php' 
+	|	'MVCandNamespaces\ClassRacine' => 'path/to/project/MVCandNamespaces/ClassRacine.php'
+	|	'MVCandNamespaces\Class_Racine' => 'path/to/project/MVCandNamespaces/Class/Racine.php'
+	|	'MVCandNamespaces\name_Space\Class_Racine' => 'C:\path\to\project\www\MVCandNamespaces\name_Space\Class\Racine.php'
+	|
+	|>Comments:
+	|	- Every class is located under top-level namespace (or vendor name) "MVCandNamespaces"
+	|	- ROOT constant is defined in the front controller(index.php) and contains vendor base_directory
+	|	- @bout Algo: When a class is referenced in top-level namespace, $lastNsPos === false.
 */
-
-
 
 spl_autoload_register(
 	function($nameSpace) {
-		$nameSpace = ltrim($nameSpace); // on supprime les éventuels '\' en début de chemin
+		$nameSpace 		= ltrim($nameSpace); 		// Delete possible '\' at the beginning
 		$pathToFileName = '';
-		$lastNsPos = strrpos($nameSpace, '\\'); // position du dernier séparateur de namespace '\'
-		if($lastNsPos !== false) //Si le dernier séparateur a été trouvé <=> s'il y a une arborescence
+		$lastNsPos 		= strrpos($nameSpace, '\\');// Last namespace separator('\') position 
+		if($lastNsPos !== false) 					// If there is at least one separator, there is a folder structure to unmask
 		{
-			$pathToFileName = substr($nameSpace, 0, $lastNsPos + 1); // On isole la première partie du chemin [[0 , lastNsPos]]
-			$nameSpace 		= substr($nameSpace, $lastNsPos + 1); 	 // On récupère le dernier segment (nom de la classe) [[lastNsPos , ... ]]
+			$pathToFileName = substr($nameSpace, 0, $lastNsPos + 1); // Truncation of first path segment [[0 , lastNsPos]]
+			$nameSpace 		= substr($nameSpace, $lastNsPos + 1); 	 // Truncation of the last segment(class name) [[lastNsPos , ... ]]
 			$pathToFileName = str_replace('\\', DIRECTORY_SEPARATOR, $pathToFileName);
 		}
-		$pathToFileName .= str_replace('_', DIRECTORY_SEPARATOR, $nameSpace); //On ajoute le nom de la classe suivant PSR-0 (compatible normes PHP <= 5.2.x)
+		$pathToFileName .= str_replace('_', DIRECTORY_SEPARATOR, $nameSpace); // Add Class name according to PSR-0 (PHP <= 5.2.x compatible )
 		
 		$finalPath = ROOT . $pathToFileName . '.php';
 		var_dump($finalPath);
@@ -43,7 +42,7 @@ spl_autoload_register(
 		}
 		else 
 		{ 
-			echo "on passe le relai au prochain autoloader! gl ;"; 
+			echo "We hand over the baton to the next autoloader! gl !"; 
 		}
 
 	}
