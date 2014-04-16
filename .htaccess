@@ -11,10 +11,10 @@
 	# L: Last		>> Last rule to execute when matched > Avoid infinite loops
 	# QSA: Qsappend	>> Also Transfer potential URL parameters (?param=blabla...)
 	
-	RewriteRule	^(.*)/(.*)/(.*)/$	index.php?controller=$1&action=$2&parameters=$3	[L,QSA,NC]
+	RewriteRule	^([a-zA-Z]+)/([a-zA-Z]+)/([a-zA-Z0-9]+)/?$	index.php?controller=$1&action=$2&parameters=$3	[L,QSA,NC]
 
-	RewriteRule	^(.*)/(.*)/$	index.php?controller=$1&action=$2	[L,QSA,NC]
-	
-	RewriteRule	^(.*)/$	index.php?controller=$1	[L,QSA,NC]
+	RewriteRule	^([a-zA-Z]+)/([a-zA-Z]+)/?$	index.php?controller=$1&action=$2	[L,QSA,NC]
+
+	RewriteRule	^([a-zA-Z]+)/?$	index.php?controller=$1	[L,QSA,NC]
 
 </IfModule>

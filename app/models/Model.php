@@ -3,14 +3,14 @@ namespace MVCandNamespaces\app\models;
 /*
 	Model.php
 	|> Parent class of models
-	|	- Provides to child classes a single instance of a database connection
+	|	- Provides child classes with a single instance of a database connection
 */
 
 use MVCandNamespaces\lib\DbConnection; 
 
 //use PDO; // uncomment when PDO constants are required (ex: PDO::PARAM_INT)
 
-Class Model
+abstract class Model
 {
 	// Child classes will access database connection through this attribute
 	protected $_db;
@@ -22,8 +22,5 @@ Class Model
 		
 		return $this->_db;
 	}
-
-
-
 
 }
